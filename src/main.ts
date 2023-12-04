@@ -1,31 +1,37 @@
-import {createPinia} from "pinia";
-import {createApp} from "vue";
+import { createPinia } from "pinia";
+import { createApp } from "vue";
 import Vue3Toastify from "vue3-toastify";
 import * as yup from "yup";
 import Checkout from "./Checkout.vue";
+import Skeleton from "primevue/skeleton";
+import InputText from "primevue/inputtext";
+import "primevue/resources/themes/lara-light-amber/theme.css";
+import "../css/frontend.css";
 
-const pinia = createPinia()
-const app = createApp(Checkout)
+const pinia = createPinia();
+const app = createApp(Checkout);
 
-app.use(pinia)
+app.use(pinia);
+app.component("Skeleton", Skeleton);
+app.component("InputText", InputText);
 app.use(Vue3Toastify, {
-    autoClose: 3000
-})
+  autoClose: 3000,
+});
 
-app.mount('#cart')
+app.mount("#checkout");
 
 yup.setLocale({
-    string: {
-        email: "Неверный формат email",
-        min: ({ min }) => `Минимум ${min}`,
-        length: ({ length }) => `Минимум ${length}`,
-        max: ({ max }) => `Максимум ${max}`,
-    },
-    mixed: {
-        default: "Заполните поле корректно",
-        required: "Поле обязательно",
-    },
-    tuple: {
-        notType: "Неверный формат",
-    },
+  string: {
+    email: "Неверный формат email",
+    min: ({ min }) => `Минимум ${min}`,
+    length: ({ length }) => `Минимум ${length}`,
+    max: ({ max }) => `Максимум ${max}`,
+  },
+  mixed: {
+    default: "Заполните поле корректно",
+    required: "Поле обязательно",
+  },
+  tuple: {
+    notType: "Неверный формат",
+  },
 });

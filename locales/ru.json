@@ -110,7 +110,7 @@
     "product": {
       "add_to_cart": "Добавить в корзину",
       "description": "Описание",
-      "on_sale": "Распродажа",
+      "on_sale": "Black Friday",
       "share": "Поделиться этим продуктом",
       "sold_out": "Продано",
       "unavailable": "Недоступно",
@@ -155,7 +155,7 @@
         "image_available": "Изображение {{ index }} доступно в средстве просмотра галереи"
       },
       "view_full_details": "Просмотреть всю информацию",
-      "include_taxes": "Сумма налога включена.",
+      "include_taxes": " ",
       "shipping_policy_html": "<a href=\"{{ link }}\">Стоимость доставки<\/a> рассчитывается при оформлении заказа.",
       "choose_options": "Выберите варианты",
       "choose_product_options": "Выберите варианты для {{ product_name }}",
@@ -192,7 +192,7 @@
       "reset": "Сбросить",
       "sort_button": "Сортировка",
       "sort_by_label": "Сортировка:",
-      "to": "Для",
+      "to": "До",
       "filters_selected": {
         "one": "Выбрано: {{ count }}",
         "other": "Выбрано: {{ count }}",

@@ -1,5 +1,41 @@
 {
   "sections": {
+    "714873f5-dff1-4ddb-b5b3-982e93e5c2cf": {
+      "type": "image-banner",
+      "blocks": {
+        "631ee5f8-5ae1-4914-ac57-25e47a8981d8": {
+          "type": "heading",
+          "settings": {
+            "heading": "",
+            "heading_size": "h2"
+          }
+        },
+        "9c8e7a21-4d5f-480d-befa-c9b521df978c": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "631ee5f8-5ae1-4914-ac57-25e47a8981d8",
+        "9c8e7a21-4d5f-480d-befa-c9b521df978c"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/49-1200x800-9b9f185.png",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
+        "desktop_content_position": "bottom-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "left",
+        "color_scheme": "inverse",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
+      }
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -26,6 +62,7 @@
         "heading",
         "button"
       ],
+      "disabled": true,
       "settings": {
         "image_overlay_opacity": 40,
         "image_height": "large",
@@ -42,7 +79,7 @@
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured products",
+        "title": "BLACK FRIDAY 24.11 - 01.12",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
@@ -58,7 +95,7 @@
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
-        "show_vendor": false,
+        "show_vendor": true,
         "show_rating": false,
         "enable_quick_add": false,
         "columns_mobile": "2",
@@ -69,6 +106,7 @@
     }
   },
   "order": [
+    "714873f5-dff1-4ddb-b5b3-982e93e5c2cf",
     "image_banner",
     "featured_collection"
   ]

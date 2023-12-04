@@ -5,3 +5,5 @@ src/*
 tsconfig.json
 tsconfig.node.json
 .env
+public/*
+jsconfig.json

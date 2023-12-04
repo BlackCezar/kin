@@ -28,6 +28,7 @@
 
     {% render 'meta-tags' %}
 
+    <script src="https://unpkg.com/vue@next" defer="defer"></script>
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
@@ -44,6 +45,12 @@
     %}
 
     {% style %}
+      .header__icon--cart{
+  visibility: hidden;
+  display: none;
+  width: 0px !important;
+  height: 0px;
+}
       {{ settings.type_body_font | font_face: font_display: 'swap' }}
       {{ body_font_bold | font_face: font_display: 'swap' }}
       {{ body_font_italic | font_face: font_display: 'swap' }}
@@ -236,7 +243,7 @@
         grid-template-columns: 100%;
         min-height: 100%;
         margin: 0;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         letter-spacing: 0.06rem;
         line-height: calc(1 + 0.8 / var(--font-body-scale));
         font-family: var(--font-body-family);
@@ -246,7 +253,7 @@
 
       @media screen and (min-width: 750px) {
         body {
-          font-size: 1.6rem;
+          font-size: 1.5rem;
         }
       }
     {% endstyle %}

@@ -14,6 +14,7 @@ export const useCheckout = defineStore("checkout", {
     checkoutId: null,
   }),
   getters: {
+    discount: (state) => state.cart?.total_discount ?? 0,
     isPaid: (state) => {
       if (
         [PaymentStatus.PAID, PaymentStatus.APPROVED].includes(
@@ -31,6 +32,8 @@ export const useCheckout = defineStore("checkout", {
     },
     async reCreate() {
       this.isFetching = true;
+      if (!this.cart) return;
+
       const result = await client
         .post("cart", {
           json: {

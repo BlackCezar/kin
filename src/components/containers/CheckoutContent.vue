@@ -5,8 +5,26 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 
 const {} = useForm({
-  validationSchema: yup.object().shape(),
-  initialValues: {},
+  validationSchema: yup.object().shape({
+    username: yup.string().required('Заполните имя'),
+    email: yup
+    .string()
+        .email("Неверный формат email")
+        .matches(
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            "Неверный формат email",
+        )
+        .required("Заполните email"),
+    phone: yup.string().required(),
+    deliveryType: yup.string().required(),
+    deliveryAddress: yup.string().required()
+  }),
+  initialValues: {
+    username: '',
+    email: '',
+    phone: '',
+    deliveryType: 'delivery'
+  },
 });
 </script>
 

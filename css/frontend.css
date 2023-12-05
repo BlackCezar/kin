@@ -7,6 +7,10 @@
         @apply t-text-2xl t-font-normal t-mx-0 t-px-0 lg:t-text-2xl;
     }
 
+    .error-text {
+        font-size: 10px;
+        color: #C62424;
+    }
 }
 #checkout {
     @apply t-px-2;

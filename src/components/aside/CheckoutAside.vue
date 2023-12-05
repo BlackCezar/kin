@@ -2,7 +2,13 @@
 import UiInput from "../ui/UiInput.vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
+import CheckoutAsideProductLine from "./CheckoutAsideProductLine.vue";
+import {useCheckout} from "../../store/checkout.store.ts";
+import {storeToRefs} from "pinia";
+import CheckoutAsideTotals from "./CheckoutAsideTotals.vue";
 
+const checkoutStore = useCheckout()
+const {cart} = storeToRefs(checkoutStore)
 const {} = useForm({
   validationSchema: yup.object().shape({
     promoCode: yup.string().optional().min(4),
@@ -22,24 +28,18 @@ const {} = useForm({
     <div
       class="t-grid t-grid-cols-[88px_auto] lg:t-grid-cols-[132px_auto] t-gap-6 t-mb-12"
     >
-      <Skeleton
-        shape="rectangle"
-        border-radius="0"
-        class="t-aspect-square t-w-full t-h-auto"
-      />
-      <div class="t-flex t-w-full t-flex-col t-gap-1">
-        <Skeleton height="20px" border-radius="0" />
-        <Skeleton height="16px" border-radius="0" />
-      </div>
+      <template v-for="item of cart?.items" :key="item.id">
+        <CheckoutAsideProductLine :line="item" />
+      </template>
     </div>
-    <div class="t-flex t-w-full t-flex-col t-gap-4">
-      <Skeleton height="16px" border-radius="0" />
-      <Skeleton height="16px" border-radius="0" />
-      <Skeleton height="16px" border-radius="0" />
-      <div class="t-w-full t-h-px !t-block t-border t-border-black"></div>
-      <Skeleton height="16px" border-radius="0" />
-      <Skeleton height="48px" border-radius="0" class="t-mt-9 lg:t-mt-14" />
-    </div>
+    <CheckoutAsideTotals />
+    <button
+        class="t-mt-9 hover:t-bg-opacity-80 lg:t-mt-14 t-bg-black t-py-4 t-w-full"
+    >
+      <span class="t-text-white">
+      Перейти к оплате
+        </span>
+    </button>
   </aside>
 </template>
 

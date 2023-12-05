@@ -20,6 +20,14 @@ export interface ICheckoutContacts {
   username: string;
   subscribed: boolean;
 }
+
+export interface ICheckoutItemImage {
+  aspect_ratio: number;
+  alt: string;
+  height: number;
+  width: number;
+  url:string;
+}
 export interface ICheckoutItem {
   count: number;
   price: number;
@@ -31,7 +39,7 @@ export interface ICheckoutItem {
   inventoryItemId: string;
   variant: {
     size: string;
-    image?: string;
+    image?: ICheckoutItemImage;
     vendor: string;
     productTitle: string;
   };

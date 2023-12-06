@@ -1,9 +1,14 @@
 import { defineStore } from "pinia";
-import { ICheckout, ICheckoutState } from "../types/checkout.ts";
+import {
+  ICheckout,
+  ICheckoutPaymentResponse,
+  ICheckoutState,
+} from "../types/checkout.ts";
 import ky from "ky";
 import { IShopifyCart } from "../types/shopify.ts";
 import { client } from "../composables/api.client.ts";
 import { PaymentStatus } from "../types/payment";
+import { toast } from "vue3-toastify";
 
 export const useCheckout = defineStore("checkout", {
   state: (): ICheckoutState => ({
@@ -12,6 +17,7 @@ export const useCheckout = defineStore("checkout", {
     isFetchingCart: false,
     isFetching: false,
     checkoutId: null,
+    isLoading: false,
   }),
   getters: {
     discount: (state) => state.cart?.total_discount ?? 0,
@@ -29,6 +35,68 @@ export const useCheckout = defineStore("checkout", {
   actions: {
     setCheckoutId(id: string) {
       this.checkoutId = id;
+    },
+    isMatch() {
+      if (!this.checkout || !this.cart) return false;
+      const amount = this.checkout.items.reduce(
+        (acc, item) => (acc += item.price),
+        0,
+      );
+      const cartAmount = this.cart.items.reduce(
+        (acc, item) => (acc += item.price),
+        0,
+      );
+      if (amount !== cartAmount) return false;
+      if (this.checkout.items.length !== this.cart.items.length)
+        for (const item of this.cart.items) {
+          const hasInCheckout = this.checkout.items.find(
+            (i) =>
+              i.variantId === `gid://Shopify/ProductVariant/${item.variant_id}`,
+          );
+          if (!hasInCheckout) return false;
+          if (item.quantity !== hasInCheckout.count) return false;
+        }
+      return true;
+    },
+    async toPayment(values, token: string) {
+      this.isLoading = true;
+      try {
+        if (this.checkout && this.isMatch()) {
+          const paymentResult = await client
+            .post("cart/payment", {
+              json: {
+                _id: this.checkoutId,
+                contacts: {
+                  email: values.email,
+                  phone: values.phone,
+                  username: values.username,
+                },
+                token,
+                delivery: {
+                  address: values.deliveryAddress,
+                  type: values.deliveryType,
+                  addressObject: values.deliveryObject,
+                },
+                payment: values.paymentType,
+              },
+            })
+            .json<ICheckoutPaymentResponse>();
+
+          if (paymentResult?.redirect) {
+            this.isLoading = false;
+            window.location.href = paymentResult.redirect;
+          }
+        } else {
+          toast.error(
+            "Во время перехода к оплате возникла ошибка, попробуйте еще раз",
+          );
+        }
+      } catch (err: any) {
+        console.trace(err);
+        console.dir(err);
+        toast.error(err.message ?? "Возникла ошибка при оформлении заказа");
+        this.isLoading = false;
+      }
     },
     async reCreate() {
       this.isFetching = true;

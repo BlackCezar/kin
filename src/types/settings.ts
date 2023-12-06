@@ -13,4 +13,4 @@ type FilledState = {
   isFetchingPaymentTypes: boolean;
   isFetchingSettings: boolean;
 };
-export type ISettingsState = EmptyState & FilledState;
+export type ISettingsState = EmptyState | FilledState;

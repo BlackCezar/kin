@@ -3,12 +3,12 @@ import UiInput from "../ui/UiInput.vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import CheckoutAsideProductLine from "./CheckoutAsideProductLine.vue";
-import {useCheckout} from "../../store/checkout.store.ts";
-import {storeToRefs} from "pinia";
+import { useCheckout } from "../../store/checkout.store.ts";
+import { storeToRefs } from "pinia";
 import CheckoutAsideTotals from "./CheckoutAsideTotals.vue";
 
-const checkoutStore = useCheckout()
-const {cart} = storeToRefs(checkoutStore)
+const checkoutStore = useCheckout();
+const { cart } = storeToRefs(checkoutStore);
 const {} = useForm({
   validationSchema: yup.object().shape({
     promoCode: yup.string().optional().min(4),
@@ -34,11 +34,10 @@ const {} = useForm({
     </div>
     <CheckoutAsideTotals />
     <button
-        class="t-mt-9 hover:t-bg-opacity-80 lg:t-mt-14 t-bg-black t-py-4 t-w-full"
+      @click="$emit('submit')"
+      class="t-mt-9 hover:t-bg-opacity-80 lg:t-mt-14 t-bg-black t-py-4 t-w-full"
     >
-      <span class="t-text-white">
-      Перейти к оплате
-        </span>
+      <span class="t-text-white"> Перейти к оплате </span>
     </button>
   </aside>
 </template>

@@ -18,7 +18,7 @@ export const useSettings = defineStore("settings", {
     async loadPaymentTypes() {
       this.isFetchingPaymentTypes = true;
       const result = await client
-        .get("payments")
+        .get("cart/payments")
         .json<{ array?: IPaymentType[] }>();
       if (result?.array && Array.isArray(result.array)) {
         this.paymentTypes = result.array;

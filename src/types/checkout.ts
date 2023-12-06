@@ -1,4 +1,6 @@
 import { IShopifyCart } from "./shopify.ts";
+import { IAddressObject } from "./delivery";
+import { IPayment } from "./payment";
 
 export type ICheckoutState =
   | EmptyState
@@ -26,7 +28,7 @@ export interface ICheckoutItemImage {
   alt: string;
   height: number;
   width: number;
-  url:string;
+  url: string;
 }
 export interface ICheckoutItem {
   count: number;
@@ -64,11 +66,13 @@ export interface ICheckout {
 }
 
 export type FetchingCartState = EmptyState & {
+  isLoading: boolean;
   isFetchingCart: true;
 };
 
 export type FetchingCheckoutState = EmptyState & {
   cart: IShopifyCart;
+  isLoading: boolean;
   isFetchingCart: false;
   isFetching: true;
 };
@@ -78,6 +82,7 @@ export type EmptyState = {
   cart: null;
   isFetchingCart: boolean;
   isFetching: boolean;
+  isLoading: boolean;
   checkoutId: null;
 };
 
@@ -87,6 +92,7 @@ export type FilledState = {
   isFetchingCart: false;
   isFetching: false;
   checkoutId: string;
+  isLoading: boolean;
 };
 
 export interface IMessages {
@@ -111,4 +117,24 @@ export interface IMessages {
   flashCallSendText?: string;
   emailSend?: string;
   emailPlaceholder?: string;
+}
+
+export interface ICheckoutPaymentRequest {
+  _id: string;
+  payment: string;
+  contacts: {
+    email: string;
+    phone: string;
+    username: string;
+  };
+  delivery: {
+    address: string;
+    type: string;
+    addressObject: IAddressObject;
+  };
+}
+export interface ICheckoutPaymentResponse {
+  code: number;
+  object: any;
+  redirect: string;
 }

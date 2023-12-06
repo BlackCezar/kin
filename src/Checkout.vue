@@ -3,13 +3,15 @@ import CheckoutSkeleton from "./components/containers/CheckoutSkeleton.vue";
 import OrderResult from "./components/containers/OrderResult.vue";
 import CheckoutContent from "./components/containers/CheckoutContent.vue";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { getCurrentInstance, onMounted } from "vue";
 import { useCheckout } from "./store/checkout.store.ts";
 import { useSettings } from "./store/settings.store.ts";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
 const checkoutStore = useCheckout();
 const settingsStore = useSettings();
 const { checkout, isFetching, isFetchingCart } = storeToRefs(checkoutStore);
+const { instance } = useReCaptcha();
 
 onMounted(() => {
   if (localStorage.getItem("checkout-id")) {
@@ -17,6 +19,8 @@ onMounted(() => {
   }
   checkoutStore.loadCheckout();
   settingsStore.loadSettings();
+
+  if (instance.value) instance.value.hideBadge();
 });
 </script>
 

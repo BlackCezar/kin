@@ -39,13 +39,14 @@ export const useCheckout = defineStore("checkout", {
     isMatch() {
       if (!this.checkout || !this.cart) return false;
       const amount = this.checkout.items.reduce(
-        (acc, item) => (acc += item.price),
+        (acc, item) => (acc += item.price * item.count),
         0,
       );
       const cartAmount = this.cart.items.reduce(
-        (acc, item) => (acc += item.price),
+        (acc, item) => (acc += item.price * item.quantity),
         0,
       );
+      console.log(amount, cartAmount)
       if (amount !== cartAmount) return false;
       if (this.checkout.items.length !== this.cart.items.length)
         for (const item of this.cart.items) {
@@ -136,6 +137,10 @@ export const useCheckout = defineStore("checkout", {
         this.checkoutId = result.object._id;
         this.checkout = result.object;
         localStorage.setItem("checkout-id", result.object._id);
+        const params = new URLSearchParams(window.location.search)
+        params.set('id', result.object._id)
+        window.location.search = '?' + params.toString()
+
         this.isFetching = false;
       }
 
@@ -155,7 +160,14 @@ export const useCheckout = defineStore("checkout", {
           .json<{ object: ICheckout }>();
         if (result?.object?._id) {
           this.checkout = result.object;
-          this.isFetching = false;
+      console.log('isMatch', this.isMatch())
+          if (this.isMatch()) {
+            this.isFetching = false;
+          } else {
+            this.checkout = null;
+            this.checkoutId = null;
+            this.reCreate()
+          }
         }
       } else if (this.cart.items.length) {
         const result = await client
@@ -192,6 +204,10 @@ export const useCheckout = defineStore("checkout", {
           this.checkoutId = result.object._id;
           this.checkout = result.object;
           localStorage.setItem("checkout-id", result.object._id);
+          const params = new URLSearchParams(window.location.search)
+          params.set('id', result.object._id)
+          window.location.search = '?' + params.toString()
+          console.log('params', params.toString())
           this.isFetching = false;
         }
       }

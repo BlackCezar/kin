@@ -513,18 +513,16 @@
             </button>
           </noscript>
 
-          <button
-            type="submit"
+          <a
+                  href="/pages/checkout-new"
             id="CartDrawer-Checkout"
             class="cart__checkout-button button"
-            name="checkout"
-            form="CartDrawer-Form"
             {% if cart == empty %}
               disabled
             {% endif %}
           >
             {{ 'sections.cart.checkout' | t }}
-          </button>
+          </a>
         </div>
       </div>
     </div>

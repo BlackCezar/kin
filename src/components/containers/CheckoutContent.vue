@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { useCheckout } from "../../store/checkout.store.ts";
 import { toast } from "vue3-toastify";
+import {storeToRefs} from "pinia";
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const recaptcha = async () => {
@@ -14,6 +15,7 @@ const recaptcha = async () => {
 };
 
 const checkoutStore = useCheckout();
+const {checkout} = storeToRefs(checkoutStore)
 
 const { handleSubmit } = useForm({
   validationSchema: yup.object().shape({
@@ -81,11 +83,13 @@ const { handleSubmit } = useForm({
       .required(),
   }),
   initialValues: {
-    username: "",
-    email: "",
-    phone: "",
-    deliveryType: "delivery",
-    paymentType: "yookassa",
+    username: checkout.value?.contacts?.username ?? "",
+    email: checkout.value?.contacts?.email ?? "",
+    phone: checkout.value?.contacts?.phone ?? "",
+    deliveryType: checkout.value?.delivery?.type ?? "delivery",
+    paymentType: checkout.value?.paymentType ?? "yookassa",
+    deliveryAddress: checkout.value?.delivery?.address ?? '',
+    deliveryObject: checkout.value?.delivery?.addressObject ?? null,
   },
 });
 

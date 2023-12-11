@@ -123,6 +123,7 @@ var itemSelect = (event: { value: IAddressObject }) => {
 .p-selectbutton .p-button {
   width: 100%;
   border-radius: 0;
+  height: 48px;
 }
 .p-selectbutton .p-button[aria-checked="false"] {
   background-color: rgba(0, 0, 0, 0.5);

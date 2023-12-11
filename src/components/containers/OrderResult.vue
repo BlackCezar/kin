@@ -2,9 +2,11 @@
 import { storeToRefs } from "pinia";
 import { useCheckout } from "../../store/checkout.store.ts";
 import { useSettings } from "../../store/settings.store.ts";
+import {computed} from "vue";
+import {ICheckoutStatus} from "../../types/checkout.ts";
 
 const checkoutStore = useCheckout();
-const { isPaid } = storeToRefs(checkoutStore);
+const { isPaid, checkout } = storeToRefs(checkoutStore);
 
 const settingsStore = useSettings();
 const { messages } = storeToRefs(settingsStore);
@@ -12,6 +14,33 @@ const { messages } = storeToRefs(settingsStore);
 const reCreateCheckout = () => {
   checkoutStore.reCreate();
 };
+
+const statusText = computed(() => {
+  if (isPaid.value) {
+    if (!messages.value) return;
+    if (checkout.value?.orderId) {
+      return messages.value.paidStatusText?.replace('{orderId}', checkout.value.orderId)
+    }
+    if (checkout.value.status === ICheckoutStatus.PROCESS) return 'Еще чуть-чуть'
+
+    return messages.value.errorStatusText;
+  } else {
+    return messages.value?.expiredStatusText;
+  }
+})
+
+const descriptionText = computed(() => {
+  if (isPaid.value) {
+    if (!messages.value) return;
+    if (checkout.value?.orderId) {
+      return messages.value.paidDescriptionText?.replace('{orderId}', checkout.value.orderId)
+    }
+    if (checkout.value.status === ICheckoutStatus.PROCESS) return 'Ваш заказ в процессе формирования, пожалуйста, подождите'
+    return messages.value.errorDescriptionText;
+  } else {
+    return messages.value?.expiredDescriptionText;
+  }
+})
 </script>
 
 <template>
@@ -67,12 +96,10 @@ const reCreateCheckout = () => {
         class="t-text-[28px] lg:t-text-[48px] t-text-black t-mb-4 lg:t-mb-5"
         v-if="messages"
       >
-        {{ isPaid ? messages?.paidStatusText : messages.errorStatusText }}
+        {{statusText}}
       </div>
       <div class="t-text-base lg:t-text-[20px] t-text-black">
-        {{
-          isPaid ? messages?.paidDescriptionText : messages.errorDescriptionText
-        }}
+        {{descriptionText}}
       </div>
     </div>
     <div class="t-flex t-justify-center t-w-full t-mt-auto t-gap-4">
@@ -80,7 +107,7 @@ const reCreateCheckout = () => {
       <button type="button" @click="reCreateCheckout">
         Попробовать заново
       </button>
-      <button type="button">В корзину</button>
+      <a href="/cart">В корзину</a>
     </div>
   </div>
 </template>

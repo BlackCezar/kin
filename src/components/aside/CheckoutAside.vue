@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 import CheckoutAsideTotals from "./CheckoutAsideTotals.vue";
 
 const checkoutStore = useCheckout();
-const { cart } = storeToRefs(checkoutStore);
+const { cart, isLoading } = storeToRefs(checkoutStore);
 const {} = useForm({
   validationSchema: yup.object().shape({
     promoCode: yup.string().optional().min(4),
@@ -35,9 +35,11 @@ const {} = useForm({
     <CheckoutAsideTotals />
     <button
       @click="$emit('submit')"
-      class="t-mt-9 hover:t-bg-opacity-80 lg:t-mt-14 t-bg-black t-py-4 t-w-full"
+      :disabled="isLoading"
+      class="t-mt-9 hover:t-bg-opacity-80 lg:t-mt-14 t-bg-black t-py-4 t-w-full disabled:t-bg-opacity-80"
     >
-      <span class="t-text-white"> Перейти к оплате </span>
+      <span v-if="!isLoading" class="t-text-white"> Перейти к оплате </span>
+      <span v-else class="t-text-white">Переход к оплате...</span>
     </button>
   </aside>
 </template>

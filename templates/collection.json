@@ -3,34 +3,68 @@
     "banner": {
       "type": "main-collection-banner",
       "settings": {
-        "show_collection_description": true,
+        "color_scheme": "color-background-1",
+        "overlay_enable": true,
+        "section_layout": "full",
+        "add_word": "Collection",
+        "show_word": false,
+        "show_collection_description": false,
+        "image_products": "shopify:\/\/shop_images\/IMG_4138.jpg",
+        "image_size": "medium",
         "show_collection_image": false,
-        "color_scheme": "background-1"
+        "ticker_enable": false,
+        "color_scheme_ticker": "light",
+        "ticker_position": "bottom",
+        "ticker_text": "Some text",
+        "ticker_speed": 5,
+        "ticker_font": 14,
+        "ticker_padding_top": 15,
+        "ticker_padding_bottom": 15,
+        "margin_top": 0,
+        "margin_bottom": 0
       }
     },
     "product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
-        "products_per_page": 40,
-        "columns_desktop": 4,
-        "color_scheme": "background-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
+        "products_per_page": 23,
+        "per_row": 5,
+        "mobile_card_count": true,
+        "taypes_position": "in_menu",
         "show_secondary_image": true,
+        "show_sku": false,
         "show_vendor": true,
-        "show_rating": false,
-        "enable_quick_add": false,
+        "show_desc": false,
+        "image_ratio": "portrait",
+        "image_fit": "cover",
         "enable_filtering": true,
-        "filter_type": "drawer",
         "enable_sorting": true,
-        "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "instagram-collage": {
+      "type": "instagram-collage",
+      "disabled": true,
+      "settings": {
+        "subheading": "Subheading",
+        "heading": "Heading",
+        "button_label": "",
+        "icon_social": "none",
+        "button_link": "",
+        "column_per_row": 4,
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 80,
+        "enable_border_top": false,
+        "enable_border_bottom": false
       }
     }
   },
   "order": [
     "banner",
-    "product-grid"
+    "product-grid",
+    "instagram-collage"
   ]
 }

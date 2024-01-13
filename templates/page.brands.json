@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "a851a021-c148-4b60-9ff7-8df418b744a7": {
+      "type": "brands",
+      "settings": {
+        "per_row": 6,
+        "color_scheme": "color-background-1",
+        "heading": "Бренды",
+        "padding_top": 30,
+        "padding_bottom": 80,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "a851a021-c148-4b60-9ff7-8df418b744a7"
+  ]
+}

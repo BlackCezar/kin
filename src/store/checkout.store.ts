@@ -3,29 +3,46 @@ import {
   ICheckout,
   ICheckoutPaymentResponse,
   ICheckoutState,
+  ICheckoutStatus,
 } from "../types/checkout.ts";
 import ky from "ky";
 import { IShopifyCart } from "../types/shopify.ts";
 import { client } from "../composables/api.client.ts";
 import { PaymentStatus } from "../types/payment";
 import { toast } from "vue3-toastify";
+import { state } from "vue-tsc/out/shared";
 
 export const useCheckout = defineStore("checkout", {
   state: (): ICheckoutState => ({
     checkout: null,
     cart: null,
+    error: null,
     isFetchingCart: false,
     isFetching: false,
+    isDiscounting: false,
     checkoutId: null,
     isLoading: false,
   }),
   getters: {
+    total: (state) => state.cart?.total_price ?? 0,
     discount: (state) => state.cart?.total_discount ?? 0,
+    hasDiscount: (state) =>
+      state.cart?.cart_level_discount_applications?.find(
+        (item) => item.type === "discount_code",
+      ),
     isPaid: (state) => {
       if (
         [PaymentStatus.PAID, PaymentStatus.APPROVED].includes(
           state.checkout?.payment?.status,
         )
+      )
+        return true;
+
+      if (
+        [ICheckoutStatus.COMPLETED, ICheckoutStatus.PROCESS].includes(
+          state.checkout?.status,
+        ) &&
+        state.checkout?.orderId
       )
         return true;
 
@@ -46,7 +63,6 @@ export const useCheckout = defineStore("checkout", {
         (acc, item) => (acc += item.price * item.quantity),
         0,
       );
-      console.log(amount, cartAmount)
       if (amount !== cartAmount) return false;
       if (this.checkout.items.length !== this.cart.items.length)
         for (const item of this.cart.items) {
@@ -59,10 +75,59 @@ export const useCheckout = defineStore("checkout", {
         }
       return true;
     },
+    async clearDiscount() {
+      this.isDiscounting = true;
+      try {
+        await ky.get("/discount/null");
+        await ky.post("/cart/update.js", {
+          json: {
+            attributes: {
+              discount: null,
+            },
+          },
+        });
+        await this.fetchCart();
+      } catch (err: any) {
+        if (err.name === "HTTPError") {
+          const errorJson = await err.response.json();
+          this.error = errorJson;
+          this.isFetching = false;
+        } else {
+          toast.error(err.message ?? "Ошибка очистки промокода");
+          this.isLoading = false;
+        }
+      }
+      this.isDiscounting = false;
+    },
+    async appendDiscount(discount: string) {
+      this.isDiscounting = true;
+      try {
+        await ky.get("/discount/" + discount);
+        await ky.post("/cart/update.js", {
+          json: {
+            attributes: {
+              discount: discount,
+            },
+          },
+        });
+        await this.fetchCart();
+      } catch (err: any) {
+        if (err.name === "HTTPError") {
+          const errorJson = await err.response.json();
+          this.error = errorJson;
+          this.isFetching = false;
+        } else {
+          toast.error(err.message ?? "Промокод не найден");
+          this.isLoading = false;
+        }
+      }
+      this.isDiscounting = false;
+    },
     async toPayment(values, token: string) {
       this.isLoading = true;
       try {
         if (this.checkout && this.isMatch()) {
+          await this.checkCart();
           const paymentResult = await client
             .post("cart/payment", {
               json: {
@@ -79,6 +144,8 @@ export const useCheckout = defineStore("checkout", {
                   addressObject: values.deliveryObject,
                 },
                 payment: values.paymentType,
+                discountApplications:
+                  this.cart.cart_level_discount_applications,
               },
             })
             .json<ICheckoutPaymentResponse>();
@@ -93,83 +160,25 @@ export const useCheckout = defineStore("checkout", {
           );
         }
       } catch (err: any) {
-        console.trace(err);
-        console.dir(err);
-        toast.error(err.message ?? "Возникла ошибка при оформлении заказа");
-        this.isLoading = false;
+        if (err.name === "HTTPError") {
+          const errorJson = await err.response.json();
+          this.error = errorJson;
+          console.log("err", errorJson);
+
+          this.isFetching = false;
+        } else {
+          console.trace(err);
+          console.dir(err);
+          toast.error(err.message ?? "Возникла ошибка при оформлении заказа");
+          this.isLoading = false;
+        }
       }
     },
     async reCreate() {
       this.isFetching = true;
       if (!this.cart) return;
-
-      const result = await client
-        .post("cart", {
-          json: {
-            token: this.cart.token,
-            codes: this.cart.attributes?.discount
-              ? [this.cart.attributes.discount]
-              : [],
-            items: this.cart.items.map((item) => ({
-              quantity: item.quantity,
-              price: item.price,
-              discount: item.original_price - item.discounted_price,
-              allocations: item.line_level_discount_allocations?.length
-                ? item.line_level_discount_allocations
-                : [],
-              title: item.title,
-              vendor: item.vendor,
-              product_title: item.product_title,
-              product_type: item.product_type,
-              size: item.variant_title,
-              image: item.featured_image,
-              description: item.product_description,
-              id: item.id,
-              variantId: "gid://shopify/ProductVariant/" + item.variant_id,
-            })),
-          },
-        })
-        .json<{
-          object: ICheckout;
-        }>();
-      console.log("create checkout response", result);
-      if (result?.object?._id) {
-        this.checkoutId = result.object._id;
-        this.checkout = result.object;
-        localStorage.setItem("checkout-id", result.object._id);
-        const params = new URLSearchParams(window.location.search)
-        params.set('id', result.object._id)
-        window.location.search = '?' + params.toString()
-
-        this.isFetching = false;
-      }
-
-      this.isFetching = false;
-    },
-    async loadCheckout() {
-      this.isFetchingCart = true;
-      this.cart = await ky.get("/cart.js").json<IShopifyCart>();
-      console.log("cart loaded");
-      this.isFetchingCart = false;
-      this.isFetching = true;
-
-      if (this.checkoutId) {
-        console.log("has checkoutId");
-        const result = await client
-          .get(`cart/${this.checkoutId}`)
-          .json<{ object: ICheckout }>();
-        if (result?.object?._id) {
-          this.checkout = result.object;
-      console.log('isMatch', this.isMatch())
-          if (this.isMatch()) {
-            this.isFetching = false;
-          } else {
-            this.checkout = null;
-            this.checkoutId = null;
-            this.reCreate()
-          }
-        }
-      } else if (this.cart.items.length) {
+      console.log("ReCreate");
+      try {
         const result = await client
           .post("cart", {
             json: {
@@ -204,11 +213,144 @@ export const useCheckout = defineStore("checkout", {
           this.checkoutId = result.object._id;
           this.checkout = result.object;
           localStorage.setItem("checkout-id", result.object._id);
-          const params = new URLSearchParams(window.location.search)
-          params.set('id', result.object._id)
-          window.location.search = '?' + params.toString()
-          console.log('params', params.toString())
+          const params = new URLSearchParams(window.location.search);
+          params.set("id", result.object._id);
+          window.location.search = "?" + params.toString();
+
           this.isFetching = false;
+        }
+
+        this.isFetching = false;
+      } catch (err: any) {
+        if (err.name === "HTTPError") {
+          const errorJson = await err.response.json();
+          this.error = errorJson;
+          console.log("err", errorJson);
+
+          this.isFetching = false;
+        }
+      }
+    },
+    async fetchCart() {
+      this.cart = await ky.get("/cart.js").json<IShopifyCart>();
+      console.log("cart loaded");
+    },
+    async fetchCheckout() {
+      const result = await client.get(`cart/${this.checkoutId}`).json<{
+        object: ICheckout;
+      }>();
+      if (result?.object?._id) {
+        this.checkout = result.object;
+        if (!this.isMatch()) {
+          this.checkout = null;
+          this.checkoutId = null;
+          this.reCreate();
+        } else if (
+          [ICheckoutStatus.COMPLETED, ICheckoutStatus.PROCESS].includes(
+            result.object.status,
+          )
+        ) {
+          if (this.cart?.token === this.checkout.id) {
+            localStorage.removeItem("cartToken");
+            localStorage.removeItem("checkout-id");
+            await ky.get("/cart/clear.js");
+          }
+        }
+      }
+    },
+    async checkCart() {
+      try {
+        console.log("[checkCart]");
+        await client.post("cart/check", {
+          json: {
+            items: this.cart?.items.map((c) => ({
+              id: c.id,
+              product_type: c.product_type,
+              quantity: c.quantity,
+            })),
+          },
+        });
+      } catch (err: any) {
+        if (err.name === "HTTPError") {
+          const errorJson = await err.response.json();
+          this.error = errorJson;
+          console.log("err", errorJson);
+        }
+      }
+      this.isFetching = false;
+    },
+    async loadCheckout() {
+      this.isFetchingCart = true;
+      await this.fetchCart();
+      this.isFetchingCart = false;
+      this.isFetching = true;
+      if (this.checkoutId) {
+        console.log("has checkoutId");
+        try {
+          await this.fetchCheckout();
+        } catch (err: any) {
+          if (err.name === "HTTPError") {
+            const errorJson = await err.response.json();
+            this.error = errorJson;
+            console.log("err", errorJson);
+            if (errorJson.status === 400) {
+              this.checkout = null;
+              this.checkoutId = null;
+              this.reCreate();
+            } else {
+              this.isFetching = false;
+            }
+          }
+        }
+      } else if (this.cart?.items.length) {
+        try {
+          const result = await client
+            .post("cart", {
+              json: {
+                token: this.cart.token,
+                codes: this.cart.attributes?.discount
+                  ? [this.cart.attributes.discount]
+                  : [],
+                items: this.cart.items.map((item) => ({
+                  quantity: item.quantity,
+                  price: item.price,
+                  discount: item.original_price - item.discounted_price,
+                  allocations: item.line_level_discount_allocations?.length
+                    ? item.line_level_discount_allocations
+                    : [],
+                  title: item.title,
+                  vendor: item.vendor,
+                  product_title: item.product_title,
+                  product_type: item.product_type,
+                  size: item.variant_title,
+                  image: item.featured_image,
+                  description: item.product_description,
+                  id: item.id,
+                  variantId: "gid://shopify/ProductVariant/" + item.variant_id,
+                })),
+              },
+            })
+            .json<{
+              object: ICheckout;
+            }>();
+          console.log("create checkout response", result);
+          if (result?.object?._id) {
+            this.checkoutId = result.object._id;
+            this.checkout = result.object;
+            localStorage.setItem("checkout-id", result.object._id);
+            const params = new URLSearchParams(window.location.search);
+            params.set("id", result.object._id);
+            window.location.search = "?" + params.toString();
+            console.log("params", params.toString());
+          }
+        } catch (err: any) {
+          if (err.name === "HTTPError") {
+            const errorJson = await err.response.json();
+            this.error = errorJson;
+            console.log("err", errorJson);
+
+            this.isFetching = false;
+          }
         }
       }
     },

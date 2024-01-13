@@ -1,124 +1,146 @@
 if (!customElements.get('quick-add-modal')) {
-  customElements.define(
-    'quick-add-modal',
-    class QuickAddModal extends ModalDialog {
-      constructor() {
-        super();
-        this.modalContent = this.querySelector('[id^="QuickAddInfo-"]');
-      }
+	customElements.define('quick-add-modal', class QuickAddModal extends ModalDialog {
+		constructor() {
+			super();
+			this.modalContent = this.querySelector('[id^="QuickAddInfo-"]');
+		}
 
-      hide(preventFocus = false) {
-        const cartNotification = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
-        if (cartNotification) cartNotification.setActiveElement(this.openedBy);
-        this.modalContent.innerHTML = '';
+		hide(preventFocus = false) {
+			const cartDrawer = document.querySelector('cart-drawer');
+			if (cartDrawer) cartDrawer.setActiveElement(this.openedBy);
+			this.modalContent.innerHTML = '';
 
-        if (preventFocus) this.openedBy = null;
-        super.hide();
-      }
+			if (preventFocus) this.openedBy = null;
+			super.hide();
+		}
 
-      show(opener) {
-        opener.setAttribute('aria-disabled', true);
-        opener.classList.add('loading');
-        opener.querySelector('.loading__spinner').classList.remove('hidden');
+		show(opener) {
+			opener.setAttribute('aria-disabled', true);
+			opener.classList.add('loading');
 
-        fetch(opener.getAttribute('data-product-url'))
-          .then((response) => response.text())
-          .then((responseText) => {
-            const responseHTML = new DOMParser().parseFromString(responseText, 'text/html');
-            this.productElement = responseHTML.querySelector('section[id^="MainProduct-"]');
-            this.productElement.classList.forEach((classApplied) => {
-              if (classApplied.startsWith('color-') || classApplied === 'gradient')
-                this.modalContent.classList.add(classApplied);
-            });
-            this.preventDuplicatedIDs();
-            this.removeDOMElements();
-            this.setInnerHTML(this.modalContent, this.productElement.innerHTML);
+			if (opener.querySelector('.loading-overlay__spinner')) {
+				opener.querySelector('.loading-overlay__spinner').classList.remove('hidden');
+			}
 
-            if (window.Shopify && Shopify.PaymentButton) {
-              Shopify.PaymentButton.init();
-            }
+			fetch(opener.getAttribute('data-product-url'))
+				.then((response) => response.text())
+				.then((responseText) => {
+					const responseHTML = new DOMParser().parseFromString(responseText, 'text/html');
+					this.productElement = responseHTML.querySelector('[id^="MainProduct-"]');
+					this.preventDuplicatedIDs();
+					this.removeDOMElements();
+					this.setInnerHTML(this.modalContent, this.productElement.innerHTML, opener);
 
-            if (window.ProductModel) window.ProductModel.loadShopifyXR();
+					if (window.Shopify && Shopify.PaymentButton) {
+						Shopify.PaymentButton.init();
+					}
 
-            this.removeGalleryListSemantic();
-            this.updateImageSizes();
-            this.preventVariantURLSwitching();
-            super.show(opener);
-          })
-          .finally(() => {
-            opener.removeAttribute('aria-disabled');
-            opener.classList.remove('loading');
-            opener.querySelector('.loading__spinner').classList.add('hidden');
-          });
-      }
+					if (window.ProductModel) window.ProductModel.loadShopifyXR();
 
-      setInnerHTML(element, html) {
-        element.innerHTML = html;
+					this.removeGalleryListSemantic();
+					this.updateImageSizes();
+					this.preventVariantURLSwitching();
+					super.show(opener);
+				})
+				.finally(() => {
+					opener.removeAttribute('aria-disabled');
+					opener.classList.remove('loading');
 
-        // Reinjects the script tags to allow execution. By default, scripts are disabled when using element.innerHTML.
-        element.querySelectorAll('script').forEach((oldScriptTag) => {
-          const newScriptTag = document.createElement('script');
-          Array.from(oldScriptTag.attributes).forEach((attribute) => {
-            newScriptTag.setAttribute(attribute.name, attribute.value);
-          });
-          newScriptTag.appendChild(document.createTextNode(oldScriptTag.innerHTML));
-          oldScriptTag.parentNode.replaceChild(newScriptTag, oldScriptTag);
-        });
-      }
+					if (opener.querySelector('.loading-overlay__spinner')) {
+						opener.querySelector('.loading-overlay__spinner').classList.add('hidden');
+					}
 
-      preventVariantURLSwitching() {
-        const variantPicker = this.modalContent.querySelector('variant-radios,variant-selects');
-        if (!variantPicker) return;
+					var slider = new Swiper('.quick-add-modal .js-media-list', {
+						slidesPerView: 1,
+						autoHeight: true,
+						navigation: {
+							nextEl: '.swiper-btn--next',
+							prevEl: '.swiper-btn--prev',
+						},
+						pagination: {
+							el: ".swiper-pagination",
+							clickable: true,
+						},
+						on: {
+							slideChange: function () {
+								window.pauseAllMedia();
+							}
+						}
+					});
+				});
+		}
 
-        variantPicker.setAttribute('data-update-url', 'false');
-      }
+		setInnerHTML(element, html, opener) {
+			element.innerHTML = html;
 
-      removeDOMElements() {
-        const pickupAvailability = this.productElement.querySelector('pickup-availability');
-        if (pickupAvailability) pickupAvailability.remove();
+			// Reinjects the script tags to allow execution. By default, scripts are disabled when using element.innerHTML.
+			element.querySelectorAll('script').forEach(oldScriptTag => {
+				const newScriptTag = document.createElement('script');
+				Array.from(oldScriptTag.attributes).forEach(attribute => {
+					newScriptTag.setAttribute(attribute.name, attribute.value)
+				});
+				newScriptTag.appendChild(document.createTextNode(oldScriptTag.innerHTML));
+				oldScriptTag.parentNode.replaceChild(newScriptTag, oldScriptTag);
+			});
 
-        const productModal = this.productElement.querySelector('product-modal');
-        if (productModal) productModal.remove();
+			// Read more button
+			const moreBtn = document.createElement('a');
+			moreBtn.textContent = `${theme.quickviewMore}`;
+			moreBtn.setAttribute('href', opener.getAttribute('data-product-url'));
+			moreBtn.setAttribute('class', 'product__read-more button--simple full-unstyled-link h6');
+			element.querySelector('.product__info-container').appendChild(moreBtn);
+		}
 
-        const modalDialog = this.productElement.querySelectorAll('modal-dialog');
-        if (modalDialog) modalDialog.forEach((modal) => modal.remove());
-      }
+		removeDOMElements() {
+			const pickupAvailability = this.productElement.querySelector('pickup-availability');
+			if (pickupAvailability) pickupAvailability.remove();
 
-      preventDuplicatedIDs() {
-        const sectionId = this.productElement.dataset.section;
-        this.productElement.innerHTML = this.productElement.innerHTML.replaceAll(sectionId, `quickadd-${sectionId}`);
-        this.productElement.querySelectorAll('variant-selects, variant-radios, product-info').forEach((element) => {
-          element.dataset.originalSection = sectionId;
-        });
-      }
+			const productModal = this.productElement.querySelector('product-modal');
+			if (productModal) productModal.remove();
 
-      removeGalleryListSemantic() {
-        const galleryList = this.modalContent.querySelector('[id^="Slider-Gallery"]');
-        if (!galleryList) return;
+			const gift = this.productElement.querySelector('.customer');
+			if (gift) gift.remove();
+		}
 
-        galleryList.setAttribute('role', 'presentation');
-        galleryList.querySelectorAll('[id^="Slide-"]').forEach((li) => li.setAttribute('role', 'presentation'));
-      }
+		preventDuplicatedIDs() {
+			const sectionId = this.productElement.dataset.section;
+			this.productElement.innerHTML = this.productElement.innerHTML.replaceAll(sectionId, `quickadd-${ sectionId }`);
+			this.productElement.querySelectorAll('variant-selects, variant-radios').forEach((variantSelect) => {
+				variantSelect.dataset.originalSection = sectionId;
+			});
+		}
 
-      updateImageSizes() {
-        const product = this.modalContent.querySelector('.product');
-        const desktopColumns = product.classList.contains('product--columns');
-        if (!desktopColumns) return;
+		preventVariantURLSwitching() {
+			if (this.modalContent.querySelector('variant-radios,variant-selects')) {
+				this.modalContent.querySelector('variant-radios,variant-selects').setAttribute('data-update-url', 'false');
+			}
+		}
 
-        const mediaImages = product.querySelectorAll('.product__media img');
-        if (!mediaImages.length) return;
+		removeGalleryListSemantic() {
+			const galleryList = this.modalContent.querySelector('[id^="Slider-Gallery"]');
+			if (!galleryList) return;
 
-        let mediaImageSizes =
-          '(min-width: 1000px) 715px, (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)';
+			galleryList.setAttribute('role', 'presentation');
+			galleryList.querySelectorAll('[id^="Slide-"]').forEach(li => li.setAttribute('role', 'presentation'));
+		}
 
-        if (product.classList.contains('product--medium')) {
-          mediaImageSizes = mediaImageSizes.replace('715px', '605px');
-        } else if (product.classList.contains('product--small')) {
-          mediaImageSizes = mediaImageSizes.replace('715px', '495px');
-        }
+		updateImageSizes() {
+			const product = this.modalContent.querySelector('.product');
+			const desktopColumns = product.classList.contains('product--columns');
+			if (!desktopColumns) return;
 
-        mediaImages.forEach((img) => img.setAttribute('sizes', mediaImageSizes));
-      }
-    }
-  );
+			const mediaImages = product.querySelectorAll('.product__media img');
+			if (!mediaImages.length) return;
+
+			let mediaImageSizes = '(min-width: 1000px) 715px, (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)';
+
+			if (product.classList.contains('product--medium')) {
+				mediaImageSizes = mediaImageSizes.replace('715px', '605px');
+			} else if (product.classList.contains('product--small')) {
+				mediaImageSizes = mediaImageSizes.replace('715px', '495px');
+			}
+
+			mediaImages.forEach(img => img.setAttribute('sizes', mediaImageSizes));
+		}
+	});
 }

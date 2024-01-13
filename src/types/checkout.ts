@@ -80,7 +80,9 @@ export type FetchingCheckoutState = EmptyState & {
 export type EmptyState = {
   checkout: null;
   cart: null;
+  error: null;
   isFetchingCart: boolean;
+  isDiscounting: boolean;
   isFetching: boolean;
   isLoading: boolean;
   checkoutId: null;
@@ -91,8 +93,14 @@ export type FilledState = {
   checkout: ICheckout;
   isFetchingCart: false;
   isFetching: false;
+  isDiscounting: boolean;
   checkoutId: string;
   isLoading: boolean;
+  error: {
+    message: string;
+    status: number;
+    payload: any;
+  };
 };
 
 export interface IMessages {

@@ -27,3 +27,6 @@
 .p-skeleton {
     display: block !important;
 }
+.drawer__footer button.button--primary {
+    background-color: rgba(var(--color-button),var(--alpha-button-background));
+}

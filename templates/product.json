@@ -4,14 +4,12 @@
       "type": "main-product",
       "blocks": {
         "vendor": {
-          "type": "text",
+          "type": "vendor",
           "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
           }
         },
         "title": {
-          "type": "title",
+          "type": "heading",
           "settings": {
           }
         },
@@ -26,28 +24,50 @@
             "picker_type": "button"
           }
         },
-        "quantity_selector": {
-          "type": "quantity_selector",
-          "settings": {
-          }
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
             "show_dynamic_checkout": false,
+            "show_quantity": false,
             "show_gift_card_recipient": false
           }
         },
-        "description": {
-          "type": "description",
+        "popup": {
+          "type": "popup",
+          "disabled": true,
+          "settings": {
+            "label": "Pop-up link text",
+            "heading": "Popup heading",
+            "text": "<p>Some text<\/p>"
+          }
+        },
+        "pickup_availability": {
+          "type": "pickup_availability",
+          "disabled": true,
           "settings": {
           }
         },
-        "share": {
-          "type": "share",
+        "complementary": {
+          "type": "complementary",
           "disabled": true,
           "settings": {
-            "share_label": "Share"
+            "product_list_limit": 3
+          }
+        },
+        "59fe4837-85fc-4652-bf26-3bca4cb1fe71": {
+          "type": "description",
+          "settings": {
+            "description_heading": "Описание",
+            "default_open": true
+          }
+        },
+        "e0a64ab2-c500-43e7-ae03-dfbe9f7a3d55": {
+          "type": "about",
+          "disabled": true,
+          "settings": {
+            "about_heading": "Some title",
+            "about_heading_content": "<p>Some description<\/p>",
+            "default_open": false
           }
         }
       },
@@ -56,79 +76,53 @@
         "title",
         "price",
         "variant_picker",
-        "quantity_selector",
         "buy_buttons",
-        "description",
-        "share"
+        "popup",
+        "pickup_availability",
+        "complementary",
+        "59fe4837-85fc-4652-bf26-3bca4cb1fe71",
+        "e0a64ab2-c500-43e7-ae03-dfbe9f7a3d55"
       ],
       "settings": {
-        "enable_sticky_info": true,
-        "color_scheme": "background-1",
-        "media_size": "large",
-        "constrain_to_viewport": true,
-        "media_fit": "contain",
-        "gallery_layout": "stacked",
-        "media_position": "left",
-        "image_zoom": "lightbox",
-        "mobile_thumbnails": "hide",
-        "hide_variants": true,
-        "enable_video_looping": false,
-        "padding_top": 36,
-        "padding_bottom": 12
+        "desktop_alignment": "right",
+        "mobile_alignment": "before",
+        "image_gallery_collage": "thumbnail_carousel",
+        "image_fit": "cover",
+        "image_ratio": "adapt",
+        "show_share": false,
+        "show_share_facebook": false,
+        "show_share_twitter": false,
+        "show_share_pinterest": false,
+        "show_share_copy": false
       }
     },
-    "26571544-84eb-412c-9c4e-6f5dbec81193": {
-      "type": "rich-text",
-      "blocks": {
-        "template--17048282169559__26571544-84eb-412c-9c4e-6f5dbec81193-heading-1": {
-          "type": "heading",
-          "settings": {
-            "heading": "Black Friday",
-            "heading_size": "h2"
-          }
-        },
-        "template--17048282169559__26571544-84eb-412c-9c4e-6f5dbec81193-text-1": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Предложение на осеннюю коллекцию действует с 24 ноября по 1 декабря<\/p>"
-          }
-        }
-      },
-      "block_order": [
-        "template--17048282169559__26571544-84eb-412c-9c4e-6f5dbec81193-heading-1",
-        "template--17048282169559__26571544-84eb-412c-9c4e-6f5dbec81193-text-1"
-      ],
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
       "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "accent-1",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
-    "related-products": {
-      "type": "related-products",
-      "settings": {
-        "heading": "Может быть интересно",
-        "heading_size": "h2",
-        "products_to_show": 4,
-        "columns_desktop": 4,
-        "color_scheme": "background-1",
-        "image_ratio": "square",
-        "image_shape": "default",
+        "per_row": 6,
+        "mobile_card_count": true,
+        "subheading": "",
+        "heading": "Другие цвета модели",
+        "button_label": "button label",
+        "button_link": "",
+        "image_ratio": "portrait",
+        "image_fit": "cover",
         "show_secondary_image": true,
+        "show_sku": false,
         "show_vendor": true,
-        "show_rating": false,
-        "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 28
+        "show_desc": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "enable_border_top": false,
+        "enable_border_bottom": false
       }
     }
   },
   "order": [
     "main",
-    "26571544-84eb-412c-9c4e-6f5dbec81193",
-    "related-products"
+    "product-recommendations"
   ]
 }

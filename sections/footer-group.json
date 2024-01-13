@@ -1,26 +1,63 @@
 {
-  "name": "t:sections.footer.name",
   "type": "footer",
+  "name": "Footer Group",
   "sections": {
+    "1667d441-dc81-4765-8a99-009fc930ca41": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": ""
+      }
+    },
     "footer": {
       "type": "footer",
+      "blocks": {
+        "footer-0": {
+          "type": "logo_info",
+          "settings": {
+            "logo": "shopify:\/\/shop_images\/Group_1_2.svg",
+            "logo_width": 120,
+            "text": "<p>Kin Concept Store Moscow - это концептуальный мультибрендовый магазин одежды, обуви и аксессуаров от европейских производителей: AMI Paris, A.P.C., Ten C, Birkenstock, Stone Island и др.<\/p>",
+            "enable_border_left": false,
+            "enable_border_right": false
+          }
+        },
+        "footer-1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Помощь покупателю",
+            "menu": "help-menu"
+          }
+        },
+        "5e8c920f-597e-4aa0-8c30-896a902aa572": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Информация",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "footer-0",
+        "footer-1",
+        "5e8c920f-597e-4aa0-8c30-896a902aa572"
+      ],
       "settings": {
-        "color_scheme": "background-1",
-        "newsletter_enable": false,
-        "newsletter_heading": "Подписаться на рассылку",
+        "color_scheme": "background-4",
         "enable_follow_on_shop": false,
-        "show_social": false,
+        "payment_enable": false,
         "enable_country_selector": false,
         "enable_language_selector": false,
-        "payment_enable": false,
         "show_policy": false,
-        "margin_top": 0,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 20,
+        "enable_border_top": false,
+        "enable_border_bottom": false
       }
     }
   },
   "order": [
+    "1667d441-dc81-4765-8a99-009fc930ca41",
     "footer"
   ]
 }

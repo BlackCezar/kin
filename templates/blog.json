@@ -3,13 +3,11 @@
     "main": {
       "type": "main-blog",
       "settings": {
-        "layout": "collage",
         "show_image": true,
-        "image_height": "medium",
+        "show_tags": true,
         "show_date": true,
-        "show_author": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "show_author": true,
+        "show_excerpt": false
       }
     }
   },

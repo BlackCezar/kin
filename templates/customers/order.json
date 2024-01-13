@@ -3,12 +3,16 @@
     "main": {
       "type": "main-order",
       "settings": {
-        "padding_top": 36,
-        "padding_bottom": 36
+      }
+    },
+    "popular-products": {
+      "type": "popular-products",
+      "settings": {
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "popular-products"
   ]
 }

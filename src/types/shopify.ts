@@ -57,7 +57,19 @@ export interface IShopifyCartItem {
   has_components: boolean;
   currency: string;
   items_subtotal_price: number;
-  // cart_level_discount_applications: any[];
+  cart_level_discount_applications: {
+    allocation_method: string;
+    created_at: string;
+    description?: string;
+    key: string;
+    target_selection: string;
+    target_type: string;
+    title: string;
+    total_allocated_amount: number;
+    type: "discount_code";
+    value: string;
+    value_type: string;
+  }[];
   // line_level_discount_allocations: any[];
 }
 
@@ -72,4 +84,17 @@ export interface IShopifyCart {
   total_weight: number;
   item_count: number;
   items_subtotal_price: number;
+  cart_level_discount_applications: {
+    allocation_method: string;
+    created_at: string;
+    description?: string;
+    key: string;
+    target_selection: string;
+    target_type: string;
+    title: string;
+    total_allocated_amount: number;
+    type: "discount_code";
+    value: string;
+    value_type: string;
+  }[];
 }

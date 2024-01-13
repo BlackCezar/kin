@@ -1,113 +1,275 @@
 {
   "sections": {
-    "714873f5-dff1-4ddb-b5b3-982e93e5c2cf": {
-      "type": "image-banner",
+    "slideshow": {
+      "type": "slideshow",
       "blocks": {
-        "631ee5f8-5ae1-4914-ac57-25e47a8981d8": {
-          "type": "heading",
+        "9337bb74-ff16-476c-97af-28062656975e": {
+          "type": "slideshow_item",
           "settings": {
+            "image": "shopify:\/\/shop_images\/new_year_sale_a6e09991-80d0-4c21-ad18-58f7e7bbe532.jpg",
+            "color_scheme": "dark",
             "heading": "",
-            "heading_size": "h2"
-          }
-        },
-        "9c8e7a21-4d5f-480d-befa-c9b521df978c": {
-          "type": "text",
-          "settings": {
             "text": "",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "631ee5f8-5ae1-4914-ac57-25e47a8981d8",
-        "9c8e7a21-4d5f-480d-befa-c9b521df978c"
-      ],
-      "settings": {
-        "image": "shopify:\/\/shop_images\/49-1200x800-9b9f185.png",
-        "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "left",
-        "color_scheme": "inverse",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "button_label": "",
+            "button_link": "shopify:\/\/collections\/sale",
+            "button_style": "primary",
+            "button_arrow": true,
+            "overlay_enable": false,
+            "overlay_opacity": 20
           }
         },
-        "button": {
-          "type": "buttons",
+        "c16fea07-151a-420e-93f6-5155add2902d": {
+          "type": "slideshow_item",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify:\/\/collections\/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "image": "shopify:\/\/shop_images\/cghj.jpg",
+            "color_scheme": "dark",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_link": "shopify:\/\/collections\/new-arrivals",
+            "button_style": "primary",
+            "button_arrow": true,
+            "overlay_enable": false,
+            "overlay_opacity": 20
+          }
+        },
+        "79ebc368-a087-4541-b11d-7da0de76d303": {
+          "type": "slideshow_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/32521096406cd1d8cf7327f78cf571f1.jpg",
+            "color_scheme": "dark",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "button_link": "shopify:\/\/collections\/sale",
+            "button_style": "primary",
+            "button_arrow": true,
+            "overlay_enable": false,
+            "overlay_opacity": 20
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "9337bb74-ff16-476c-97af-28062656975e",
+        "c16fea07-151a-420e-93f6-5155add2902d",
+        "79ebc368-a087-4541-b11d-7da0de76d303"
       ],
-      "disabled": true,
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "inverse",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "section_layout": "full",
+        "image_size": "adapt",
+        "is_autoplay": true,
+        "is_hover_stop_autoplay": true,
+        "show_arrows": false,
+        "show_bullets": false,
+        "slideshow_speed": 0.7,
+        "slideshow_delay": 3.2,
+        "parallax": false,
+        "slide_effects": "fade",
+        "margin_top": 60,
+        "margin_bottom": 60
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "0b2cfdc3-3528-4689-b724-56505a2c2e71": {
+      "type": "multicolumn",
+      "blocks": {
+        "template--17147699888343__0b2cfdc3-3528-4689-b724-56505a2c2e71-column-1": {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/A.P.C._PAP_23FW_EXTRA_05-scaled.jpg",
+            "heading": "Женское",
+            "text": "",
+            "button_label": "Перейти в каталог",
+            "button_link": "shopify:\/\/collections\/женское"
+          }
+        },
+        "template--17147699888343__0b2cfdc3-3528-4689-b724-56505a2c2e71-column-2": {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/https-hypebeast_com-image-2023-05-apc-pre-fall-2023-collection-campaign-imagery-6_jpg.jpg",
+            "heading": "Мужское",
+            "text": "",
+            "button_label": "Перейти в каталог",
+            "button_link": "shopify:\/\/collections\/мужское"
+          }
+        }
+      },
+      "block_order": [
+        "template--17147699888343__0b2cfdc3-3528-4689-b724-56505a2c2e71-column-1",
+        "template--17147699888343__0b2cfdc3-3528-4689-b724-56505a2c2e71-column-2"
+      ],
       "settings": {
-        "title": "BLACK FRIDAY 24.11 - 01.12",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "color_scheme": "background-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": true,
-        "show_rating": false,
-        "enable_quick_add": false,
-        "columns_mobile": "2",
+        "color_scheme": "color-background-1",
+        "subheading": "",
+        "heading": "",
+        "horizontal_alignment": "center",
+        "button_label": "",
+        "button_link": "",
+        "multicolumn_to_show": 2,
+        "heading_size": "large",
+        "subheader": "",
+        "img_size": "large",
+        "img_ratio": "portrait",
+        "object_fit": "contain",
         "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "enable_border_top": false,
+        "enable_border_bottom": false
+      }
+    },
+    "image-tabs": {
+      "type": "image-tabs",
+      "blocks": {
+        "block_2": {
+          "type": "image-tab",
+          "settings": {
+            "title": "CARHARTT WIP",
+            "desc": "<p>Представляем коллекцию Carhartt WIP зима '23: Откройте для себя вершину стиля и функциональности.<\/p><p> Перейдите в мир, где грубость сочетается с изысканностью, а долговечность комбинируется с современным стилем. Carhartt WIP с гордостью представляет свою последнюю коллекцию Winter '23 - сочетание нестареющего мастерства и передового дизайна, который не подвластен времени года.<\/p>",
+            "image": "shopify:\/\/shop_images\/Frame_51.jpg",
+            "button_label": "Смотреть",
+            "button_link": "shopify:\/\/collections\/carhartt-wip",
+            "button_style": "primary",
+            "button_arrow": false
+          }
+        },
+        "a0b54b73-bd08-4cf1-b203-7e8b39d5e7dd": {
+          "type": "image-tab",
+          "settings": {
+            "title": "DR.MARTENS",
+            "desc": "<p>Культовая обувь от уже Dr. Martens, объединяющая в себе эффектный внешний вид и потрясающие эксплуатационные характеристики уже представлена в нашем концепт-сторе. <\/p><p>Универсальные модели за несколько десятков лет существования стали настоящей модной иконой. Сегодня они занимают почетное место в гардеробах адептов субкультур, музыкантов и просто любителей комфортной и неубиваемой обуви.<\/p>",
+            "image": "shopify:\/\/shop_images\/Frame_52.jpg",
+            "button_label": "Смотреть",
+            "button_link": "shopify:\/\/collections\/dr-martens",
+            "button_style": "primary",
+            "button_arrow": false
+          }
+        },
+        "5d73eb98-7f1d-4c71-a287-af6f218ecaa8": {
+          "type": "image-tab",
+          "settings": {
+            "title": "VEJA",
+            "desc": "<p>VEJA создает кроссовки по-новому, сочетая социальные проекты, экономическую справедливость и экологические материалы.<\/p><p>VEJA использует бразильский и перуанский органический хлопок для изготовления канваса и шнурков, амазонскую резину для подошвы, а также различные инновационные материалы, созданные из переработанных пластиковых бутылок или переработанного полиэстера.<\/p>",
+            "image": "shopify:\/\/shop_images\/Frame_53.jpg",
+            "button_label": "Смотреть",
+            "button_link": "shopify:\/\/collections\/veja",
+            "button_style": "primary",
+            "button_arrow": false
+          }
+        },
+        "f717144c-f8b3-4ea1-a0c2-820bc964847b": {
+          "type": "image-tab",
+          "settings": {
+            "title": "A.P.C.",
+            "desc": "<p>Бренд A.P.C. представляет повседневную коллекцию одежды и обуви с невысокой степенью официальности, где отсутствие экстравагантности компенсируется французским чувством безмятежности.<\/p><p>В сезоне FW23 коллекция наполнена скандинавскими мотивами сельской местности. Все вещи приятные, но скромные: предназначены именно для владельца, а не для его аудитории. Осенние тона, тартан, жаккардовые джемперы и однотонные вещи соседствуют с искусственной овчиной и денимом с камуфляжным принтом.<\/p>",
+            "image": "shopify:\/\/shop_images\/Frame_54.jpg",
+            "button_label": "Смотреть",
+            "button_link": "shopify:\/\/collections\/apc",
+            "button_style": "primary",
+            "button_arrow": true
+          }
+        }
+      },
+      "block_order": [
+        "block_2",
+        "a0b54b73-bd08-4cf1-b203-7e8b39d5e7dd",
+        "5d73eb98-7f1d-4c71-a287-af6f218ecaa8",
+        "f717144c-f8b3-4ea1-a0c2-820bc964847b"
+      ],
+      "settings": {
+        "subheading": "Популярные бренды",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 100,
+        "margin_bottom": 100,
+        "enable_border_top": false,
+        "enable_border_bottom": false
+      }
+    },
+    "829f337c-bfb3-4a3e-adba-c8cad8c668f5": {
+      "type": "video",
+      "settings": {
+        "full_width": true,
+        "height": "adapt",
+        "video_fit": "contain",
+        "subheading": "",
+        "heading": "",
+        "cover_image": "shopify:\/\/shop_images\/2023-12-29_15.33.38.png",
+        "video": "shopify:\/\/files\/videos\/kin x firm 23.mp4",
+        "video_url": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc",
+        "video_autoplay": true,
+        "video_loop": false,
+        "video_muted": true,
+        "video_controls": true,
+        "description": "",
+        "overlay_enable": true,
+        "overlay_opacity": 20,
+        "margin_top": 20,
+        "margin_bottom": 20
+      }
+    },
+    "9d63b593-0b13-49b0-b36f-91598979131e": {
+      "type": "featured-products",
+      "settings": {
+        "subheading": "",
+        "heading": "Новинки",
+        "text": "",
+        "product_list": [
+          "dr-martens_botinki-8053-quad-laced-up_black-polished-smooth",
+          "ami-alexandre-mattiussi_kardigan-red-adc_heather-grey-red",
+          "ten-c_bryuki-cargo_antracite",
+          "ten-c_kurtka-artic-down-parka_grigio",
+          "stone-island_kurtka-giubbotto-vera-piuma_orange-red",
+          "y-3_krossovki-y-3-gazelle_black-black-owhite",
+          "birkenstock_botinki-highwood-slip-on_mocca",
+          "carhartt-wip_rubashka-l-s-madison-cord_plant-wax",
+          "y-3_tolstovka-velvet-fz_black",
+          "y-3_krossovki-y-3-takumi-sen-9_blush-yellow-blush-yellow-black",
+          "y-3_ryukzak-y-3-ut_talc",
+          "carhartt-wip_tolstovka-half-zip-american-script_cassis",
+          "mizuno_krossovki-wave-mujin-tl_sumsand-darkshad-yelwplu",
+          "y-3_balaklava-y-3_black"
+        ],
+        "per_row": 3,
+        "mobile_card_count": true,
+        "show_secondary_image": true,
+        "show_sku": false,
+        "show_vendor": true,
+        "show_desc": false,
+        "image_ratio": "square",
+        "image_fit": "cover",
+        "button_label": "Смотреть",
+        "button_link": "shopify:\/\/collections\/all",
+        "button_style": "primary",
+        "button_arrow": true,
+        "padding_top": 100,
+        "padding_bottom": 100,
+        "margin_top": 100,
+        "margin_bottom": 100,
+        "enable_border_top": false,
+        "enable_border_bottom": false
+      }
+    },
+    "125dc737-f6eb-45c4-a2e1-31f75d847d09": {
+      "type": "brands",
+      "settings": {
+        "per_row": 6,
+        "color_scheme": "color-background-1",
+        "heading": "Бренды",
+        "padding_top": 30,
+        "padding_bottom": 80,
+        "margin_top": 0,
+        "margin_bottom": 0
       }
     }
   },
   "order": [
-    "714873f5-dff1-4ddb-b5b3-982e93e5c2cf",
-    "image_banner",
-    "featured_collection"
+    "slideshow",
+    "0b2cfdc3-3528-4689-b724-56505a2c2e71",
+    "image-tabs",
+    "829f337c-bfb3-4a3e-adba-c8cad8c668f5",
+    "9d63b593-0b13-49b0-b36f-91598979131e",
+    "125dc737-f6eb-45c4-a2e1-31f75d847d09"
   ]
 }

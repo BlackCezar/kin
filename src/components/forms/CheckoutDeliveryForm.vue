@@ -5,6 +5,7 @@ import UiInput from "../ui/UiInput.vue";
 import { useDelivery } from "../../store/delivery.store.ts";
 import { IAddressObject } from "../../types/delivery.ts";
 import CheckoutDeliverySelfForm from "./CheckoutDeliverySelfForm.vue";
+import { useCheckout } from "../../store/checkout.store.ts";
 
 var deliveryStore = useDelivery();
 
@@ -29,13 +30,23 @@ var {
   handleChange: setDeliveryObject,
   errorMessage: deliveryError,
   validate,
+  value: deliveryObject,
   setTouched,
-} = useField("deliveryObject");
+} = useField<IAddressObject>("deliveryObject");
 var filteredAddresses = ref<IAddressObject[]>([]);
 var addressField = ref("");
+var checkoutStore = useCheckout();
 
 watchEffect(() => {
-  if (meta.touched && deliveryAddress.value) setTouched(true);
+  if (meta.touched && deliveryAddress.value) {
+    setTouched(true);
+  }
+});
+
+watchEffect(() => {
+  if (deliveryAddress.value && deliveryObject.value) {
+    deliveryStore.calcDelivery(deliveryObject.value, checkoutStore.total);
+  }
 });
 
 var search = async (event: { query: string }) => {

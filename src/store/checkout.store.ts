@@ -38,6 +38,8 @@ export const useCheckout = defineStore("checkout", {
       )
         return true;
 
+      if (state.checkout?.orderId) return true;
+
       if (
         [ICheckoutStatus.COMPLETED, ICheckoutStatus.PROCESS].includes(
           state.checkout?.status,
@@ -176,7 +178,7 @@ export const useCheckout = defineStore("checkout", {
     },
     async reCreate() {
       this.isFetching = true;
-      if (!this.cart) return;
+      if (!this.cart || this.cart?.items.length) return;
       console.log("ReCreate");
       try {
         const result = await client
@@ -235,12 +237,19 @@ export const useCheckout = defineStore("checkout", {
       this.cart = await ky.get("/cart.js").json<IShopifyCart>();
       console.log("cart loaded");
     },
+    setError(err: ICheckoutState['error']) {
+      this.error = err
+    },
     async fetchCheckout() {
       const result = await client.get(`cart/${this.checkoutId}`).json<{
         object: ICheckout;
       }>();
       if (result?.object?._id) {
         this.checkout = result.object;
+
+        if (this.checkout.isClosed) {
+          return;
+        }
         if (!this.isMatch()) {
           this.checkout = null;
           this.checkoutId = null;
@@ -251,9 +260,11 @@ export const useCheckout = defineStore("checkout", {
           )
         ) {
           if (this.cart?.token === this.checkout.id) {
-            localStorage.removeItem("cartToken");
             localStorage.removeItem("checkout-id");
-            await ky.get("/cart/clear.js");
+            document.cookie = document.cookie.split(';').filter(item => {
+              const [key] = item.split('=')
+              return key.trim() !== 'cart'
+            }).join(';')
           }
         }
       }
@@ -274,7 +285,7 @@ export const useCheckout = defineStore("checkout", {
         if (err.name === "HTTPError") {
           const errorJson = await err.response.json();
           this.error = errorJson;
-          console.log("err", errorJson);
+          console.log("[checkCart] error", errorJson);
         }
       }
       this.isFetching = false;
@@ -282,18 +293,19 @@ export const useCheckout = defineStore("checkout", {
     async loadCheckout() {
       this.isFetchingCart = true;
       await this.fetchCart();
-      this.isFetchingCart = false;
       this.isFetching = true;
+      this.isFetchingCart = false;
       if (this.checkoutId) {
-        console.log("has checkoutId");
+        console.log("has checkoutId", this.checkoutId);
         try {
           await this.fetchCheckout();
+          this.isFetching = false;
         } catch (err: any) {
           if (err.name === "HTTPError") {
             const errorJson = await err.response.json();
             this.error = errorJson;
-            console.log("err", errorJson);
-            if (errorJson.status === 400) {
+            console.log("[loadCheckout] err on fetchCheckout", errorJson);
+            if (errorJson.status === 400 && this.cart.items.length) {
               this.checkout = null;
               this.checkoutId = null;
               this.reCreate();
@@ -347,12 +359,13 @@ export const useCheckout = defineStore("checkout", {
           if (err.name === "HTTPError") {
             const errorJson = await err.response.json();
             this.error = errorJson;
-            console.log("err", errorJson);
+            console.log("[loadCheckout] err", errorJson);
 
             this.isFetching = false;
           }
         }
       }
+      this.isFetching = false;
     },
   },
 });

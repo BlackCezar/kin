@@ -8,7 +8,6 @@ const checkoutStore = useCheckout();
 const { error, cart } = storeToRefs(checkoutStore);
 
 const errorItems = computed(() => {
-  console.log(error.value, cart.value);
   if ([422, 406].includes(error.value?.status) && cart.value?.items) {
     const item = cart.value.items.find(
       (i) => i.id === Number(error.value.payload.id),
@@ -26,6 +25,7 @@ const errorItems = computed(() => {
           <h2 class="t-h2 t-text-center t-pl-5 lg:t-pl-7 t-mb-5">
             Ошибка при оформлении заказа
           </h2>
+	        <p class="t-text-center" v-if="error?.message">{{error.message}}</p>
         </div>
         <div
           class="t-grid t-grid-cols-[88px_auto] lg:t-grid-cols-[132px_auto] t-gap-6 t-mb-12"
@@ -39,6 +39,7 @@ const errorItems = computed(() => {
     <div v-else-if="error?.status === 400">
       <div class="t-mb-9">
         <h2 class="t-h2 t-text-center t-mb-5">Ошибка при оформлении заказа</h2>
+	      <p class="t-text-center" v-if="error?.message">{{error.message}}</p>
       </div>
     </div>
     <div class="t-flex t-justify-center t-w-full t-mt-auto t-gap-4">

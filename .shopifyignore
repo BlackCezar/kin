@@ -7,3 +7,5 @@ tsconfig.node.json
 .env
 public/*
 jsconfig.json
+.gitignore
+package-lock.json

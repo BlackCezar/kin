@@ -21,6 +21,7 @@ export default defineConfig({
       name: "vue-cart",
       fileName: "vue-cart",
     },
+    minify: false,
     emptyOutDir: false,
     outDir: "./assets",
     rollupOptions: {},

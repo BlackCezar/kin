@@ -32,7 +32,7 @@ app.use(
     apikey: process.env.VUE_APP_YMAPS_KEY,
   }),
 );
-
+console.log('process.env.VUE_APP_RECAPTCHA', process.env.VUE_APP_RECAPTCHA)
 app.use(VueReCaptcha, {
   siteKey: process.env.VUE_APP_RECAPTCHA,
 });

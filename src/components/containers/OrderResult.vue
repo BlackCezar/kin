@@ -50,10 +50,8 @@ const descriptionText = computed(() => {
     <div class="t-mt-auto t-flex t-flex-col t-pb-10 lg:t-pb-16 t-items-center">
 	    <div class="t-mb-10 lg:t-mb-16">
 			    <svg
+				    v-if="isPaid"
 				    class=" lg:t-w-[15rem] lg:t-h-[15rem]"
-				    :class="{
-						'hidden': !checkoutStore.isPaid
-				    }"
 				    width="120"
 				    height="120"
 				    viewBox="0 0 120 120"
@@ -70,9 +68,7 @@ const descriptionText = computed(() => {
 				    />
 			    </svg>
 			    <svg
-				    :class="{
-						'hidden': checkoutStore.isPaid
-				    }"
+				    v-else
 				    class="lg:t-w-[15rem] lg:t-h-[15rem]"
 				    width="120"
 				    height="120"

@@ -25,9 +25,9 @@ onMounted(() => {
     console.log("onMounted");
     setFieldValue(
       "promoCode",
-      cart.value?.cart_level_discount_applications.find(
+      cart.value?.cart_level_discount_applications?.find(
         (item) => item.type === "discount_code",
-      )?.title,
+      )?.title ?? '',
     );
   }
 });
@@ -59,19 +59,21 @@ const onBlur = async () => {
 </script>
 
 <template>
-  <aside class="t-max-w-[544px] t-w-full t-min-w-[352px]">
+  <div class="t-max-w-[544px] t-w-full t-min-w-[352px]">
     <form @submit.prevent="processPromoCode" class="t-mb-9">
       <h2 class="t-h2 t-pl-5 lg:t-pl-7 t-mb-5">Детали заказа</h2>
       <UiInput @blur="onBlur" label="Промокод" name="promoCode" />
     </form>
     <div
-      class="t-grid t-grid-cols-[88px_auto] lg:t-grid-cols-[132px_auto] t-gap-6 t-mb-12"
+      class="t-mb-12"
     >
-      <template v-for="item of cart?.items" :key="item.id">
+      <div class="t-grid t-grid-cols-[88px_auto] t-gap-6 lg:t-grid-cols-[132px_auto]" v-for="item of cart?.items" :key="item.id">
         <CheckoutAsideProductLine :line="item" />
-      </template>
+      </div>
     </div>
+	  <div>
     <CheckoutAsideTotals />
+	  </div>
     <button
       @click="$emit('submit')"
       :disabled="isLoading || isDiscounting"
@@ -83,7 +85,7 @@ const onBlur = async () => {
       <span v-if="!isLoading" class="t-text-white"> Перейти к оплате </span>
       <span v-else class="t-text-white">Переход к оплате...</span>
     </button>
-  </aside>
+  </div>
 </template>
 
 <style scoped></style>

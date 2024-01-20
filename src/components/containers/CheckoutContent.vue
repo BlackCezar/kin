@@ -32,7 +32,6 @@ const { handleSubmit } = useForm({
     deliveryType: yup.string().required("Выберите способ доставки"),
     deliveryAddress: yup.string().required("Выберите адрес доставки"),
     deliveryObject: yup.lazy((_value, options) => {
-      console.log(options.parent.deliveryType);
       if (options.parent.deliveryType === "self") {
         return yup.object().shape({
           id: yup.string().required("Выберите пункт"),
@@ -105,7 +104,8 @@ var processForm = handleSubmit(async (values) => {
     //@ts-ignore
     setFieldError(result.payload.id, result.message);
   } else if (result && "message" in result && result.message) {
-    toast.error(result.message);
+	  //@ts-ignore
+    toast.error(result?.message ?? '');
   }
 });
 </script>

@@ -155,6 +155,8 @@ export const useCheckout = defineStore("checkout", {
           if (paymentResult?.redirect) {
             this.isLoading = false;
             window.location.href = paymentResult.redirect;
+          } else {
+            return paymentResult
           }
         } else {
           toast.error(
@@ -178,12 +180,13 @@ export const useCheckout = defineStore("checkout", {
     },
     async reCreate() {
       this.isFetching = true;
-      if (!this.cart || this.cart?.items.length) return;
-      console.log("ReCreate");
+      console.log("ReCreate started", this.cart);
+      if (!this.cart || this.cart?.item_count === 0) return;
       try {
         const result = await client
           .post("cart", {
             json: {
+              refresh: true,
               token: this.cart.token,
               codes: this.cart.attributes?.discount
                 ? [this.cart.attributes.discount]
@@ -218,7 +221,6 @@ export const useCheckout = defineStore("checkout", {
           const params = new URLSearchParams(window.location.search);
           params.set("id", result.object._id);
           window.location.search = "?" + params.toString();
-
           this.isFetching = false;
         }
 
@@ -244,21 +246,13 @@ export const useCheckout = defineStore("checkout", {
       const result = await client.get(`cart/${this.checkoutId}`).json<{
         object: ICheckout;
       }>();
+      console.log('[fetchCheckout] checkout is ', result?.object)
       if (result?.object?._id) {
         this.checkout = result.object;
 
-        if (this.checkout.isClosed) {
-          return;
-        }
-        if (!this.isMatch()) {
-          this.checkout = null;
-          this.checkoutId = null;
-          this.reCreate();
-        } else if (
-          [ICheckoutStatus.COMPLETED, ICheckoutStatus.PROCESS].includes(
-            result.object.status,
-          )
-        ) {
+        if (!this.checkout.isClosed) return;
+
+        if (this.checkout.isClosed && this.checkout.orderId) {
           if (this.cart?.token === this.checkout.id) {
             localStorage.removeItem("checkout-id");
             document.cookie = document.cookie.split(';').filter(item => {
@@ -266,13 +260,21 @@ export const useCheckout = defineStore("checkout", {
               return key.trim() !== 'cart'
             }).join(';')
           }
+
+          return;
+        } else if (this.checkout.isClosed && !this.checkout.orderId) {
+          this.checkout = null;
+          this.checkoutId = null;
+          await this.reCreate();
         }
       }
     },
     async checkCart() {
+      this.isFetching = true;
+
       try {
         console.log("[checkCart]");
-        await client.post("cart/check", {
+        const result = await client.post("cart/check", {
           json: {
             items: this.cart?.items.map((c) => ({
               id: c.id,
@@ -280,7 +282,8 @@ export const useCheckout = defineStore("checkout", {
               quantity: c.quantity,
             })),
           },
-        });
+        }).json();
+        console.log('result', result)
       } catch (err: any) {
         if (err.name === "HTTPError") {
           const errorJson = await err.response.json();
@@ -292,13 +295,17 @@ export const useCheckout = defineStore("checkout", {
     },
     async loadCheckout() {
       this.isFetchingCart = true;
+      console.log('Fetch cart started')
       await this.fetchCart();
+      console.log('Fetch cart ended, token is ', this.cart?.token)
       this.isFetching = true;
       this.isFetchingCart = false;
       if (this.checkoutId) {
         console.log("has checkoutId", this.checkoutId);
         try {
+          console.log('Fetch checkout started')
           await this.fetchCheckout();
+          console.log('Fetch checkout ended')
           this.isFetching = false;
         } catch (err: any) {
           if (err.name === "HTTPError") {
@@ -350,10 +357,9 @@ export const useCheckout = defineStore("checkout", {
             this.checkoutId = result.object._id;
             this.checkout = result.object;
             localStorage.setItem("checkout-id", result.object._id);
-            const params = new URLSearchParams(window.location.search);
-            params.set("id", result.object._id);
-            window.location.search = "?" + params.toString();
-            console.log("params", params.toString());
+
+            const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + result.object._id
+            window.history.pushState({path:newurl},'',newurl);
           }
         } catch (err: any) {
           if (err.name === "HTTPError") {

@@ -8,20 +8,19 @@ export default defineConfig({
   plugins: [
     EnvironmentPlugin({
       NODE_ENV: "development",
-
       VUE_APP_BACKEND_HOST: null,
       VUE_APP_YMAPS_KEY: null,
       VUE_APP_RECAPTCHA: null,
     }),
     vue(),
   ],
+  publicDir: './src/public',
   build: {
     lib: {
       entry: path.resolve("./src/main.ts"),
       name: "vue-cart",
       fileName: "vue-cart",
     },
-    minify: false,
     emptyOutDir: false,
     outDir: "./assets",
     rollupOptions: {},

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { IAddressObject, IDeliveryStore } from "../types/delivery";
+import {IAddressObject, IDeliveryPoint, IDeliveryStore} from "../types/delivery";
 import { client } from "../composables/api.client";
 import { toast } from "vue3-toastify";
 
@@ -28,9 +28,14 @@ export const useDelivery = defineStore("delivery", {
       }
       this.isFetchingPoints = false;
     },
-    async calcDelivery(address: IAddressObject, total: number) {
-      const payload = {
-        country: address?.data.country || "Россия",
+    async calcDelivery(address: IAddressObject | IDeliveryPoint, total: number) {
+      console.log('[calcDelivery] address', address)
+      const payload = 'name' in address ? {
+        country: address.address.country,
+        region: '',
+        city: address.address.city
+      } : {
+        country: address?.data?.country || "Россия",
         region: address?.data.region || "",
         city: address?.data.city || "",
       };

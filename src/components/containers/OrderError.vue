@@ -19,20 +19,21 @@ const errorItems = computed(() => {
 
 <template>
   <div>
+	  <pre>{{error}}</pre>
     <div v-if="error?.status === 422 || error?.status === 406">
       <aside class="t-max-w-[544px] t-mx-auto t-w-full t-min-w-[352px]">
         <div class="t-mb-9">
           <h2 class="t-h2 t-text-center t-pl-5 lg:t-pl-7 t-mb-5">
             Ошибка при оформлении заказа
           </h2>
-	        <p class="t-text-center" v-if="error?.message">{{error.message}}</p>
+	        <p class="t-text-center" v-if="error?.message">{{error?.message}}</p>
         </div>
         <div
-          class="t-grid t-grid-cols-[88px_auto] lg:t-grid-cols-[132px_auto] t-gap-6 t-mb-12"
+          class="t-gap-6 t-mb-12"
         >
-          <template v-for="item of errorItems" :key="item.id">
+          <div class="t-grid t-grid-cols-[88px_auto] lg:t-grid-cols-[132px_auto] " v-for="item of errorItems" :key="item.id">
             <CheckoutAsideProductLine :error="error.message" :line="item" />
-          </template>
+          </div>
         </div>
       </aside>
     </div>
